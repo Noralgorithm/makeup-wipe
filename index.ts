@@ -1,5 +1,8 @@
 import { Command } from "commander";
-import { ALPHABET } from "./constants";
+
+import { validateKey } from "./features/monoalphabetic-cipher/utils";
+import { encrypt } from "./features/monoalphabetic-cipher/encrypt";
+import { decrypt } from "./features/monoalphabetic-cipher/decrypt";
 
 const program = new Command();
 
@@ -37,46 +40,3 @@ program
   });
 
 program.parse();
-
-function encrypt(message: string, key: string) {
-  const encryptedMessage = message
-    .split("")
-    .map((char) => {
-      const index = ALPHABET.indexOf(char.toUpperCase());
-      if (index === -1) {
-        return char;
-      }
-      return key[index];
-    })
-    .join("");
-  return encryptedMessage;
-}
-
-function decrypt(message: string, key: string) {
-  const decryptedMessage = message
-    .split("")
-    .map((char) => {
-      const index = key.indexOf(char.toUpperCase());
-      if (index === -1) {
-        return char;
-      }
-      return ALPHABET[index];
-    })
-    .join("");
-  return decryptedMessage;
-}
-
-function validateKey(key: string) {
-  if (key.length !== ALPHABET.length) {
-    throw new Error(
-      `Key must be ${ALPHABET.length} characters long, got ${key.length}`
-    );
-  }
-  if (key.split("").some((char) => ALPHABET.indexOf(char) === -1)) {
-    throw new Error("Key must contain only characters from the alphabet");
-  }
-  if (new Set(key).size !== key.length) {
-    throw new Error("Key must not contain duplicate characters");
-  }
-  return key;
-}
