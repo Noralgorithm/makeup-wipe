@@ -3,6 +3,7 @@ import { Command } from "commander";
 import { validateKey } from "./features/monoalphabetic-cipher/utils";
 import { encrypt } from "./features/monoalphabetic-cipher/encrypt";
 import { decrypt } from "./features/monoalphabetic-cipher/decrypt";
+import { bruteForceDecrypt } from "./features/monoalphabetic-cipher/brute-force-attack";
 
 const program = new Command();
 
@@ -37,6 +38,15 @@ program
     validateKey(key);
     console.log(decrypt(message, key));
     console.log(`used-key: ${key}`);
+  });
+
+program
+  .command("decrypt-brute-force")
+  .description("Decrypt a message using brute-force attack")
+  .argument("<message>", "message to decrypt")
+  .argument("<stopWord>", "stop word to look for")
+  .action((message, stopWord) => {
+    bruteForceDecrypt(message, stopWord);
   });
 
 program.parse();
